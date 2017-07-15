@@ -1,5 +1,6 @@
 var sliderInt = 1;
 var sliderNext = 2;
+var count = $("img").length;
 
 $(document).ready(function() {
   $("#slider > img#1").fadeIn(300);
@@ -7,12 +8,41 @@ $(document).ready(function() {
 });
 
 function startSlider() {
-  var count = $("img").length;
-  var loop = setInterval(function() {
-      $("img").fadeOut(300);
-      $("img#" + sliderNext).fadeIn(300);
+  loop = setInterval(function() {
+      if(sliderNext > count) {
+        sliderNext = 1;
+        sliderInt = 1;
+      }
+
+      $("#slider >img").fadeOut(300);
+      $("#slider > img#" + sliderNext).fadeIn(300);
       sliderInt = sliderNext;
       sliderNext+=1;
-      if(sliderNext > count) {sliderNext = 1};
-  }, 1500);
+
+  }, 3000);
+}
+
+function prev() {
+  var newSlide = sliderInt - 1;
+  showSlide(newSlide);
+}
+
+function next() {
+  var newSlide = sliderInt + 1;
+  showSlide(newSlide);
+}
+
+function stopLoop() {
+  window.clearInterval(loop);
+}
+
+function showSlide(id) {
+  stopLoop();
+  if(id > count) {id = 1};
+  if(id < 1) {id = count};
+  $("img").fadeOut(300);
+  $("img#" + id).fadeIn(300);
+  sliderInt = id;
+  sliderNext = id + 1;
+  startSlider();
 }
